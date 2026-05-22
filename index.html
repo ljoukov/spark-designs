@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Designs Review UI - Student Learning Gaps</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --ink: #08183f;
+      --muted: #52607a;
+      --line: #d8e0ee;
+      --panel: #ffffff;
+      --soft: #eef4ff;
+      --accent: #2555d9;
+      --green: #0f8b65;
+      --orange: #db6b00;
+      --shadow: 0 14px 34px rgba(8, 24, 63, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(37, 85, 217, 0.09), transparent 34rem),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg) 34rem);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    header,
+    main {
+      width: min(1480px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 34px 0 18px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 56px);
+      letter-spacing: 0;
+      line-height: 1.05;
+    }
+
+    .lede {
+      max-width: 980px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .summary a,
+    .evidence,
+    .detail-card,
+    figure {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary a {
+      display: block;
+      padding: 14px 15px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .summary strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .summary span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    main {
+      padding-bottom: 56px;
+    }
+
+    section.problem {
+      margin-top: 34px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0 0 7px;
+      font-size: clamp(23px, 3vw, 34px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .operation {
+      margin: 0;
+      color: var(--muted);
+      max-width: 920px;
+    }
+
+    .count-pill {
+      justify-self: end;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--accent);
+      border: 1px solid #d7e3ff;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .evidence {
+      margin-bottom: 18px;
+      padding: 16px;
+      box-shadow: none;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .detail-card {
+      padding: 13px 14px;
+      box-shadow: none;
+    }
+
+    .detail-card h3 {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .detail-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .source-line {
+      margin: 12px 0 0;
+      color: #72809a;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .variant-note {
+      margin: 12px 0 0;
+      color: #5b3b00;
+      background: #fff8e8;
+      border: 1px solid #efd18b;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 18px;
+    }
+
+    figure {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #edf1f8;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-header {
+      padding: 13px 14px;
+      background: #fff;
+    }
+
+    figcaption {
+      padding: 13px 14px 15px;
+      background: #fff;
+    }
+
+    .card-title-wrap {
+      display: flex;
+      gap: 8px;
+      min-width: 0;
+      align-items: baseline;
+    }
+
+    .image-number {
+      flex: 0 0 auto;
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .card-title {
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .description {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .filename {
+      display: block;
+      margin-top: 9px;
+      color: #7a8498;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 1040px) {
+      .summary,
+      .detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      header,
+      main {
+        width: min(100% - 24px, 1480px);
+      }
+
+      .summary,
+      .detail-grid,
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+
+      .count-pill {
+        justify-self: start;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Designs Review UI</h1>
+    <p class="lede">Every generated design image is sorted into a concrete student learning-gap example. Each section starts with the real task, what the student actually wrote or did, the gap, and the thinking operation the design is meant to close.</p>
+    <nav class="summary" id="summary" aria-label="Problem groups"></nav>
+  </header>
+
+  <main id="app"></main>
+
+  <script>
+    const groups = [
+      {
+        id: "english-close-analysis",
+        title: "Example 1: English Literature Close Analysis",
+        operation: "Thinking operation: pick one exact word, explain its precise meaning, name the emotional effect, then link it back to conflict.",
+        details: {
+          task: "Explore in detail one poem from the anthology which presents strong emotions associated with conflict. The student used Byron's line: \"The Assyrian came down like the wolf on the fold\".",
+          wrote: "The student's part-b answer opened with divine intervention and sudden collapse, then used \"The Assyrian came down like the wolf on the fold\" to say it suggests predatory force and a merciless army. The answer also used \"purple and gold\" for glory/arrogance, anapaestic rhythm for charging movement, and \"unlifted\" horses for fragile military strength.",
+          gap: "Marked 11/20. The feedback said the line of argument and method choices were solid, especially simile, colour and movement. The next mark gap was closer quotation analysis and keeping the focus on strong emotions in conflict, not just power in general.",
+          intent: "Help the student do the missing micro-step before producing a polished paragraph: word -> meaning -> emotion -> conflict link."
+        },
+        source: "Evidence: The student's April 2026 English Literature grading run, IGCSE Poetry Comparison Essay, part b on Byron scored 11/20.",
+        cards: [
+          {
+            img: "images/1.1-actual-gap-close-the-gap-strip.png",
+            title: "Actual Gap + Close the Gap Strip",
+            desc: "Frames the English gap as broad analysis that needs one word, one meaning, one emotion, and one link."
+          },
+          {
+            img: "images/1.2-quote-microscope.png",
+            title: "Quote Microscope",
+            desc: "Turns the quote into a small inspection task so the student can choose the precise word that earns the next mark."
+          },
+          {
+            img: "images/1.3-upgrade-the-sentence.png",
+            title: "Upgrade the Sentence",
+            desc: "Shows the sentence before and after the missing close-analysis step."
+          },
+          {
+            img: "images/1.4-word-lens.png",
+            title: "Word Lens",
+            desc: "Selects a word such as wolf and makes the meaning/emotion/effect chain explicit."
+          },
+          {
+            img: "images/1.5-examiner-margin-rewrite.png",
+            title: "Examiner Margin Rewrite",
+            desc: "Uses margin feedback to show exactly what would move the answer from broad to precise."
+          },
+          {
+            img: "images/1.6-emotion-precision-dial.png",
+            title: "Emotion Precision Dial",
+            desc: "Trains the difference between vague emotion labels and sharper choices like terror, threat or awe."
+          },
+          {
+            img: "images/1.7-four-part-answer-stack.png",
+            title: "Four-Part Answer Stack",
+            desc: "Builds the final sentence as word, meaning, emotion, and conflict link."
+          },
+          {
+            img: "images/1.8-close-word-analysis-panel.png",
+            title: "Close Word Analysis Panel",
+            desc: "A dark mobile version of the same word-level rescue for the Byron quote."
+          },
+          {
+            img: "images/1.9-five-step-word-scaffold.png",
+            title: "Five-Step Word Scaffold",
+            desc: "Breaks the answer into quote, word, meaning, emotional effect, and final sentence."
+          },
+          {
+            img: "images/1.10-reasoning-graph.png",
+            title: "Reasoning Graph",
+            desc: "Represents the word analysis as a visible chain of connected reasoning nodes."
+          }
+        ]
+      },
+      {
+        id: "science-missing-chain",
+        title: "Example 2: Science Missing Chain",
+        operation: "Thinking operation: continue a biological cause-effect chain until it reaches the cellular process and body outcome.",
+        details: {
+          task: "2.8 Explain the effect of a partly blocked coronary artery on the human body.",
+          wrote: "The student left this answer blank in the graded run.",
+          gap: "The feedback says to start with narrower arteries, then reduced blood flow, reduced oxygen to the heart muscle, and reduced aerobic respiration.",
+          intent: "Do not give the full answer first. Rescue the first missing link and have the student build less blood -> less oxygen -> less respiration -> less energy/pain."
+        },
+        source: "Evidence: The student's Biology grading run where Q2.8 was blank and the feedback identified the coronary-artery explanation chain.",
+        cards: [
+          {
+            img: "images/2.1-build-the-chain.png",
+            title: "Build the Chain",
+            desc: "Turns the blank science answer into ordered cause-effect links."
+          },
+          {
+            img: "images/2.2-from-idea-to-full-marks.png",
+            title: "From Idea to Full Marks",
+            desc: "Shows how a small correct start becomes a complete explanation."
+          },
+          {
+            img: "images/2.3-recover-missing-marks.png",
+            title: "Recover Missing Marks",
+            desc: "Makes the missing marks visible as links the student has not yet supplied."
+          },
+          {
+            img: "images/2.4-chain-repair.png",
+            title: "Chain Repair",
+            desc: "Repairs a broken science chain by inserting the missing oxygen and respiration steps."
+          },
+          {
+            img: "images/2.5-process-lens.png",
+            title: "Process Lens",
+            desc: "Zooms from blood flow to the cell process the student must name."
+          },
+          {
+            img: "images/2.6-examiners-missing-marks.png",
+            title: "Examiner's Missing Marks",
+            desc: "Maps each chain link to the marks lost when the explanation stops too early."
+          },
+          {
+            img: "images/2.7-because-ladder.png",
+            title: "Because Ladder",
+            desc: "Forces each sentence to answer because, then because again, until the body effect is reached."
+          },
+          {
+            img: "images/2.8-science-chain-builder.png",
+            title: "Science Chain Builder",
+            desc: "A vertical missing-step builder for the same coronary-artery chain."
+          },
+          {
+            img: "images/2.9-process-reveal.png",
+            title: "Process Reveal",
+            desc: "Uses small process diagrams to reveal the oxygen-respiration-energy steps."
+          },
+          {
+            img: "images/2.10-clause-order.png",
+            title: "Clause Order",
+            desc: "Turns the explanation into a drag-to-order chain of clauses."
+          }
+        ]
+      },
+      {
+        id: "geography-judgement",
+        title: "Example 3: Geography Judgement",
+        operation: "Thinking operation: move beyond listing both sides by deciding what matters first, what matters later, and why.",
+        details: {
+          task: "1.11 \"Both immediate and long-term responses are needed after a tropical storm.\" Discuss this statement. Use Figure 7 and an example of a tropical storm you have studied.",
+          wrote: "The student argued that both immediate and long-term responses are needed, used Typhoon Haiyan, mentioned trapped people, temporary shelters, and concluded both are just as important.",
+          gap: "The answer was strong, but the final precision was missing: make the judgement clearer and keep the case-study detail fully accurate.",
+          intent: "Help the student separate saving lives now from rebuilding lives later, then write a conditional judgement rather than an equal/vague conclusion."
+        },
+        source: "Evidence: The student's Geography grading run on tropical-storm responses; the answer was strong but needed a clearer final judgement.",
+        cards: [
+          {
+            img: "images/3.1-make-the-judgement.png",
+            title: "Make the Judgement",
+            desc: "Pushes the strong answer from both are important into a clearer final judgement."
+          },
+          {
+            img: "images/3.2-evaluate-do-not-just-explain.png",
+            title: "Evaluate, Do Not Just Explain",
+            desc: "Separates explanation from evaluation so the student has to decide relative importance."
+          },
+          {
+            img: "images/3.3-evidence-to-judgement.png",
+            title: "Evidence to Judgement",
+            desc: "Connects Typhoon Haiyan evidence to a judgement instead of leaving it as a list."
+          },
+          {
+            img: "images/3.4-response-priority-dial.png",
+            title: "Response Priority Dial",
+            desc: "Makes the student rank immediate and long-term responses by time period and purpose."
+          },
+          {
+            img: "images/3.5-examiners-missing-link.png",
+            title: "Examiner's Missing Link",
+            desc: "Shows the missing evaluative link between evidence and why it matters."
+          },
+          {
+            img: "images/3.6-if-then-judgement-lab.png",
+            title: "If-Then Judgement Lab",
+            desc: "Builds the nuanced judgement: immediate first for survival, long-term later for recovery."
+          },
+          {
+            img: "images/3.7-judgement-verdict.png",
+            title: "Judgement Verdict",
+            desc: "Forces a final verdict after both sides have been weighed."
+          },
+          {
+            img: "images/3.8-timeline-verdict.png",
+            title: "Timeline Verdict",
+            desc: "Places immediate and long-term responses on a time line before the final judgement."
+          },
+          {
+            img: "images/3.9-sort-to-judgement.png",
+            title: "Sort to Judgement",
+            desc: "Sorts response actions and then turns the sorted evidence into a conditional judgement."
+          },
+          {
+            img: "images/3.10-balance-scale.png",
+            title: "Balance Scale",
+            desc: "Uses a balance metaphor to help the student compare both response types."
+          }
+        ]
+      },
+      {
+        id: "jekyll-hyde-paragraph",
+        title: "Example 4: Jekyll and Hyde Model Paragraph Request",
+        operation: "Thinking operation: own the paragraph spine before receiving or copying a Grade 9 model answer.",
+        details: {
+          task: "Use my pictures to write a Grade 9 full-mark model paragraph answering how repression is presented in Dr Jekyll and Mr Hyde.",
+          wrote: "The student asked for the final model paragraph and then clarified: use my pictures, use this structure, and make sure it is Grade 9 full marks.",
+          gap: "The grading run summary says the planning had relevant quotations and context, but the target was shaping them into a sustained analytical paragraph.",
+          intent: "Convert notes and model-answer dependency into an argument spine: big idea, structure, quote, word zoom, context, judgement."
+        },
+        source: "Evidence: The student's Jekyll and Hyde chat and grading run; relevant notes and quotations needed shaping into a sustained paragraph.",
+        cards: [
+          {
+            img: "images/4.1-own-the-paragraph.png",
+            title: "Own the Paragraph",
+            desc: "Keeps the student from jumping straight to a polished model by making each paragraph job visible."
+          },
+          {
+            img: "images/4.2-choose-the-argument-first.png",
+            title: "Choose the Argument First",
+            desc: "Starts with Stevenson's idea about repression before selecting quotes."
+          },
+          {
+            img: "images/4.3-assemble-the-paragraph.png",
+            title: "Assemble the Paragraph",
+            desc: "Turns notes into a paragraph by placing each analytical component in order."
+          },
+          {
+            img: "images/4.4-argument-spine-first.png",
+            title: "Argument Spine First",
+            desc: "Forces the big idea and structure before the model answer appears."
+          },
+          {
+            img: "images/4.5-evidence-courtroom.png",
+            title: "Evidence Courtroom",
+            desc: "Makes quotations prove a claim instead of sitting as copied evidence."
+          },
+          {
+            img: "images/4.6-paragraph-x-ray.png",
+            title: "Paragraph X-Ray",
+            desc: "Dissects a top-level paragraph by sentence job: big idea, structure, quote, word analysis, context, judgement."
+          },
+          {
+            img: "images/4.7-from-notes-to-paragraph.png",
+            title: "From Notes to Paragraph",
+            desc: "Transforms the student's notes and pictures into a paragraph the student has built, not just received."
+          }
+        ]
+      },
+      {
+        id: "computer-science-precision",
+        title: "Example 5: Computer Science Definition Precision",
+        operation: "Thinking operation: turn a roughly right technical idea into examiner-safe wording with the exact mark-bearing terms.",
+        details: {
+          task: "GCSE Computer Science answers where precise wording or format controls the mark: switches and MAC address tables, IPv6 groups, unsigned binary ranges, bit depth, and embedded systems.",
+          wrote: "The student's Computer Science grading run was strong overall, but lost marks on exact boundaries such as IPv6 needing 8 groups, unsigned 4-bit values starting at 0, a switch forwarding packets using a MAC address table, and an embedded system being dedicated to a specific task.",
+          gap: "The gap is not broad recall. It is converting a close-sounding answer into mark-scheme wording with the terms and formats the examiner recognises.",
+          intent: "Make the missing mark words visible, then give repeated practice upgrading vague wording into precise definitions."
+        },
+        source: "Evidence: The student's Computer Science grading run, 59/72, where several lost marks were exact wording or format boundaries.",
+        cards: [
+          {
+            img: "images/5.1-exam-wording-lock.png",
+            title: "Exam Wording Lock",
+            desc: "Locks onto command and mark words before the student answers a technical definition question."
+          },
+          {
+            img: "images/5.2-almost-right-detector.png",
+            title: "Almost Right Detector",
+            desc: "Shows why an answer is close but misses an exact definition boundary."
+          },
+          {
+            img: "images/5.3-boundary-trainer.png",
+            title: "Boundary Trainer",
+            desc: "Trains valid and invalid examples such as IPv6 structure and binary ranges."
+          },
+          {
+            img: "images/5.4-mark-words-lens.png",
+            title: "Mark-Words Lens",
+            desc: "Highlights the precise words the mark scheme is really asking for."
+          },
+          {
+            img: "images/5.5-definition-builder.png",
+            title: "Definition Builder",
+            desc: "Turns partial recall into a mark-scheme-ready definition."
+          },
+          {
+            img: "images/5.6-examiner-split-screen.png",
+            title: "Examiner Split Screen",
+            desc: "Compares the student's wording with what the examiner needed."
+          },
+          {
+            img: "images/5.7-precision-sprint.png",
+            title: "Precision Sprint",
+            desc: "Uses quick repeated practice for the exact definition move under time pressure."
+          }
+        ]
+      },
+      {
+        id: "graph-data-response-mode",
+        title: "Example 6: Graph and Data Response Mode",
+        operation: "Thinking operation: identify the command word and data cue, then choose read, plot, draw, calculate, compare or explain before answering.",
+        details: {
+          task: "Graph and table questions from Geography and Science: complete a bar chart to 13,000 km², find a gradient at 300 s with Bq/s, and calculate a percentage decrease from 20,000 to 13,000 km².",
+          wrote: "In these gaps, the issue was not the underlying topic. The student either left the graph method unresolved or started the wrong kind of response, such as explaining the context when the question wanted a visual action or calculation.",
+          gap: "The missing step is response-mode recognition: command word plus visual or data cue should choose the correct action surface before content writing begins.",
+          intent: "Train the first move before content: classify the question as read, plot, draw, calculate, compare or explain, then answer in that mode."
+        },
+        source: "Evidence: The student's graph and data grading examples across Geography and Science; the repeated pattern was action selection rather than topic knowledge.",
+        cards: [
+          {
+            img: "images/6.1-action-first.png",
+            title: "Action First",
+            desc: "Makes the student choose the requested graph action before writing any explanation."
+          },
+          {
+            img: "images/6.2-data-to-answer-scanner.png",
+            title: "Data-to-Answer Scanner",
+            desc: "Scans the graph cues and units before building the answer."
+          },
+          {
+            img: "images/6.3-question-mode-switcher.png",
+            title: "Question Mode Switcher",
+            desc: "Switches between read, plot, draw, calculate, compare and explain."
+          },
+          {
+            img: "images/6.4-action-mode-lock.png",
+            title: "Action Mode Lock",
+            desc: "Locks the correct mode for a complete-the-bar-chart question."
+          },
+          {
+            img: "images/6.5-examiner-lens.png",
+            title: "Examiner Lens",
+            desc: "Highlights command, graph and unit cues before answering."
+          },
+          {
+            img: "images/6.6-wrong-answer-replay.png",
+            title: "Wrong Answer Replay",
+            desc: "Replays why an explanation did not score on a graph-completion task."
+          },
+          {
+            img: "images/6.7-action-sorting-drill.png",
+            title: "Action Sorting Drill",
+            desc: "Trains the student to classify the first move before doing the work."
+          }
+        ]
+      }
+    ];
+
+    const summary = document.querySelector("#summary");
+    const app = document.querySelector("#app");
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&quot;");
+    }
+
+    summary.innerHTML = groups.map((group) => `
+      <a href="#${group.id}">
+        <strong>${escapeHtml(group.title.replace(/^Example /, "Ex. "))}</strong>
+        <span>${group.cards.length} images</span>
+      </a>
+    `).join("");
+
+    app.innerHTML = groups.map((group, groupIndex) => `
+      <section class="problem" id="${group.id}">
+        <div class="section-head">
+          <div>
+            <h2>${escapeHtml(group.title)}</h2>
+            <p class="operation">${escapeHtml(group.operation)}</p>
+          </div>
+          <div class="count-pill">${group.cards.length} images</div>
+        </div>
+        <div class="evidence">
+          <div class="detail-grid">
+            <div class="detail-card">
+              <h3>Task</h3>
+              <p>${escapeHtml(group.details.task)}</p>
+            </div>
+            <div class="detail-card">
+              <h3>Student wrote</h3>
+              <p>${escapeHtml(group.details.wrote)}</p>
+            </div>
+            <div class="detail-card">
+              <h3>Gap identified</h3>
+              <p>${escapeHtml(group.details.gap)}</p>
+            </div>
+            <div class="detail-card">
+              <h3>Design intent</h3>
+              <p>${escapeHtml(group.details.intent)}</p>
+            </div>
+          </div>
+          <p class="source-line">${escapeHtml(group.source)}</p>
+          ${group.variantNote ? `<p class="variant-note">${escapeHtml(group.variantNote)}</p>` : ""}
+        </div>
+        <div class="grid">
+          ${group.cards.map((card, cardIndex) => `
+            <figure>
+              <div class="card-header">
+                <div class="card-title-wrap">
+                  <span class="image-number">${groupIndex + 1}.${cardIndex + 1}</span>
+                  <div class="card-title">${escapeHtml(card.title)}</div>
+                </div>
+              </div>
+              <img src="${escapeHtml(card.img)}" alt="${escapeHtml(card.title)}">
+              <figcaption>
+                <p class="description">${escapeHtml(card.desc)}</p>
+                <span class="filename">${escapeHtml(card.img)}</span>
+              </figcaption>
+            </figure>
+          `).join("")}
+        </div>
+      </section>
+    `).join("");
+  </script>
+</body>
+</html>
